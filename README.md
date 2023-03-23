@@ -37,29 +37,27 @@ A software solution is can be a bridge between the vendors and customers, provid
 ## Technology Stack
 
 - __IDE__ </br>
-<img src="https://github.com/devicons/devicon/blob/master/icons/visualstudio/visualstudio-plain-wordmark.svg" title="Visual Studio" alt="Visual Studio" width="100" height="30"/> <br/>
+<img src="https://github.com/devicons/devicon/blob/master/icons/visualstudio/visualstudio-plain.svg" alt="Visual studio" width="150" height="35" />
 
 - __Project Management__ <br/>
-<img src="https://github.com/devicons/devicon/blob/master/icons/trello/trello-plain-wordmark.svg" title="Trello" alt="Trello" width="100" height="30"/>
+![Trello](https://img.shields.io/badge/Trello-%23026AA7.svg?style=for-the-badge&logo=Trello&logoColor=white)
 
 - __Language__<br/>
-<img src="https://github.com/devicons/devicon/blob/master/icons/csharp/csharp-original.svg" title="csharp" alt="csharp" width="100" height="30"/>
-<img src="https://github.com/devicons/devicon/blob/master/icons/dotnetcore/dotnetcore-original.svg" title="dotnet core" alt="dotnet core" width="100" height="30"/>
+![CSharp](https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=c-sharp&logoColor=white)
+![.Net](https://img.shields.io/badge/.NET-5C2D91?style=for-the-badge&logo=.net&logoColor=white)
 
 - __Web Framework__<br/>
 <img src="https://alemos.dev/images/uploads/aspnetcore.png" title="dotnet core" alt="asp.net core" width="100" height="30"/>
 
 
 - __Hosting__<br/>
-<img src="https://github.com/devicons/devicon/blob/master/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" title="aws" alt="aws" width="100" height="30"/>
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
 
 - __Version Control__<br/>
 ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
      
 - __Database__<br/>
-<img src="https://github.com/devicons/devicon/blob/master/icons/microsoftsqlserver/microsoftsqlserver-plain-wordmark.svg" title="Microsoft sql server" alt="Microsoft sql server" width="100" height="30"/>
-
-![Microsoft sql server](https://github.com/devicons/devicon/blob/master/icons/microsoftsqlserver/microsoftsqlserver-plain-wordmark.svg)
+![MicrosoftSQLServer](https://img.shields.io/badge/Microsoft%20SQL%20Sever-CC2927?style=for-the-badge&logo=microsoft%20sql%20server&logoColor=white)
  
 ## Contributors Guide
 1. Visit the project repository on [Github](https://github.com/Tenece-BEZAO/WVMS_API.git)<br/>
