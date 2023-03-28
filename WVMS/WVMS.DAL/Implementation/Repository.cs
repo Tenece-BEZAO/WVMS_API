@@ -38,12 +38,20 @@ namespace WVMS.DAL.Implementation
 
         public void AddRange(IEnumerable<T> records)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _dbSet.AddRange(records);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public Task AddRangeAsync(IEnumerable<T> records)
+        public async Task AddRangeAsync(IEnumerable<T> records)
         {
-            throw new NotImplementedException();
+            AddRange(records);
+            await SaveAsync();
         }
 
         public bool Any(Expression<Func<T, bool>> predicate = null)
