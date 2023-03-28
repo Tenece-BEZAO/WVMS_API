@@ -101,7 +101,15 @@ namespace WVMS.DAL.Implementation
 
         public bool Delete(T obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _dbSet.Remove(obj);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public Task DeleteAsync(Expression<Func<T, bool>> predicate)
