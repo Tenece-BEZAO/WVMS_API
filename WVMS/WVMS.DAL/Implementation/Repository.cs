@@ -56,12 +56,14 @@ namespace WVMS.DAL.Implementation
 
         public bool Any(Expression<Func<T, bool>> predicate = null)
         {
-            throw new NotImplementedException();
+            if (predicate == null) return _dbSet.Any();
+            return _dbSet.Any(predicate);
         }
 
-        public Task<bool> AnyAsync(Expression<Func<T, bool>> predicate = null)
+        public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate = null)
         {
-            throw new NotImplementedException();
+            if (predicate == null) return await _dbSet.AnyAsync();
+            return await _dbSet.AnyAsync(predicate);
         }
 
         public long Count(Expression<Func<T, bool>> predicate = null)
