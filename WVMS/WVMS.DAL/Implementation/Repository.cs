@@ -222,12 +222,23 @@ namespace WVMS.DAL.Implementation
 
         public T Update(T obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _dbSet.Attach(obj);
+                _dbContext.Entry<T>(obj).State = EntityState.Modified;
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public Task<T> UpdateAsync(T obj)
+        public async Task<T> UpdateAsync(T obj)
         {
-            throw new NotImplementedException();
+            Update(obj);
+            await SaveAsync();
+            return obj;
         }
 
         public void UpdateRange(IEnumerable<T> records)
