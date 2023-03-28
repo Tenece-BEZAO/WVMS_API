@@ -183,12 +183,26 @@ namespace WVMS.DAL.Implementation
 
         public int Save()
         {
-            throw new NotImplementedException();
+            try
+            {
+                return _dbContext.SaveChanges();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public Task<int> SaveAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                return _dbContext.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public Task<decimal> SumAsync(Expression<Func<T, decimal>> predicate)
