@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using WVMS.DAL.Interfaces;
 
@@ -6,6 +7,15 @@ namespace WVMS.DAL.Implementation
 {
     public class Repository<T> : IRepository<T> where T : class
     {
+        private bool disposedValue = false;
+        private readonly DbContext _dbContext;
+        private readonly DbSet<T> _dbSet;
+
+        public Repository(DbContext context)
+        {
+            _dbContext = context ?? throw new ArgumentException(null, nameof(context));
+            _dbSet = _dbContext.Set<T>();
+        }
         public T Add(T obj)
         {
             throw new NotImplementedException();
