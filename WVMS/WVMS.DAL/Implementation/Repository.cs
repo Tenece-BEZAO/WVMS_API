@@ -18,12 +18,22 @@ namespace WVMS.DAL.Implementation
         }
         public T Add(T obj)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _dbSet.Add(obj);
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public Task<T> AddAsync(T obj)
+        public virtual async Task<T> AddAsync(T obj)
         {
-            throw new NotImplementedException();
+            Add(obj);
+            await SaveAsync();
+            return obj;
         }
 
         public void AddRange(IEnumerable<T> records)
