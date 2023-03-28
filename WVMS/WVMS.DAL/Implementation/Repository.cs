@@ -96,7 +96,21 @@ namespace WVMS.DAL.Implementation
 
         public bool Delete(Expression<Func<T, bool>> predicate)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var obj = GetSingleBy(predicate);
+                if (obj != null)
+                {
+                    _dbSet.Remove(obj);
+                    return true;
+                }
+                else
+                    throw new Exception($"object does not exist");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public bool Delete(T obj)
