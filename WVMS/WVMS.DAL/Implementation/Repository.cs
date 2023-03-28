@@ -205,19 +205,19 @@ namespace WVMS.DAL.Implementation
             }
         }
 
-        public Task<decimal> SumAsync(Expression<Func<T, decimal>> predicate)
+        public async Task<decimal> SumAsync(Expression<Func<T, decimal>> predicate)
         {
-            throw new NotImplementedException();
+            return await _dbSet.SumAsync(predicate);
         }
 
-        public Task<int> SumAsync(Expression<Func<T, int>> predicate)
+        public async Task<int> SumAsync(Expression<Func<T, int>> predicate)
         {
-            throw new NotImplementedException();
+            return await _dbSet.SumAsync(predicate);
         }
 
-        public Task<long> SumAsync(Expression<Func<T, long>> predicate)
+        public async Task<long> SumAsync(Expression<Func<T, long>> predicate)
         {
-            throw new NotImplementedException();
+            return await _dbSet.SumAsync(predicate);
         }
 
         public T Update(T obj)
