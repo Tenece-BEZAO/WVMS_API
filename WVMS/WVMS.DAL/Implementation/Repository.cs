@@ -126,49 +126,98 @@ namespace WVMS.DAL.Implementation
             }
         }
 
-        public Task DeleteAsync(Expression<Func<T, bool>> predicate)
+        public virtual async Task DeleteAsync(Expression<Func<T, bool>> predicate)
         {
-            throw new NotImplementedException();
+            Delete(predicate);
+            await SaveAsync();
         }
 
-        public Task DeleteAsync(T obj)
+        public async Task DeleteAsync(T obj)
         {
-            throw new NotImplementedException();
+            Delete(obj);
+            await SaveAsync();
         }
 
         public bool DeleteById(object id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var obj = _dbSet.Find(id);
+                if (obj != null)
+                {
+                    _dbSet.Remove(obj);
+                    return true;
+                }
+                else
+                    throw new Exception($"object with id {id} does not exist");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public Task DeleteByIdAsync(object id)
+        public virtual async Task DeleteByIdAsync(object id)
         {
-            throw new NotImplementedException();
+            DeleteById(id);
+            await SaveAsync();
         }
 
-        public bool DeleteRange(Expression<Func<T, bool>> predicate)
+        public virtual bool DeleteRange(Expression<Func<T, bool>> predicate)
         {
-            throw new NotImplementedException();
+            try
+            {
+                IEnumerable<T> records = from x in _dbSet.Where<T>(predicate) select x;
+                _dbSet.RemoveRange(records);
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public bool DeleteRange(IEnumerable<T> records)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _dbSet.RemoveRange(records);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public Task DeleteRangeAsync(Expression<Func<T, bool>> predicate)
+        public virtual async Task DeleteRangeAsync(Expression<Func<T, bool>> predicate)
         {
-            throw new NotImplementedException();
+            DeleteRange(predicate);
+            await SaveAsync();
         }
 
-        public Task DeleteRangeAsync(IEnumerable<T> records)
+        public virtual async Task DeleteRangeAsync(IEnumerable<T> records)
         {
-            throw new NotImplementedException();
+            DeleteRange(records);
+            await SaveAsync();
+        }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _dbContext.Dispose();
+                }
+
+                disposedValue = true;
+            }
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         public IEnumerable<T> GetAll(Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, params string[] includeProperties)
