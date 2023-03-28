@@ -243,12 +243,20 @@ namespace WVMS.DAL.Implementation
 
         public void UpdateRange(IEnumerable<T> records)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _dbSet.UpdateRange(records);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public Task UpdateRangeAsync(IEnumerable<T> records)
+        public async Task UpdateRangeAsync(IEnumerable<T> records)
         {
-            throw new NotImplementedException();
+            UpdateRange(records);
+            await SaveAsync();
         }
     }
 }
