@@ -68,12 +68,30 @@ namespace WVMS.DAL.Implementation
 
         public long Count(Expression<Func<T, bool>> predicate = null)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (predicate == null)
+                    return _dbSet.LongCount();
+                return _dbSet.LongCount(predicate);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public Task<long> CountAsync(Expression<Func<T, bool>> predicate = null)
+        public async Task<long> CountAsync(Expression<Func<T, bool>> predicate = null)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (predicate == null)
+                    return await _dbSet.LongCountAsync();
+                return await _dbSet.LongCountAsync(predicate);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public bool Delete(Expression<Func<T, bool>> predicate)
