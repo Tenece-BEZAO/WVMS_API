@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WVMS.DAL.Interfaces;
-using WVMS.DAL.Implementation;
 
-namespace ToDoList.Data.Implementation
+namespace WVMS.DAL.Implementation
 {
     public class UnitOfWork<TContext> : IUnitOfWork<DbContext> where TContext : DbContext
     {
