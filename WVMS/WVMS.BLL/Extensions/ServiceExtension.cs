@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WVMS.BLL.Services;
+using WVMS.BLL.ServicesContract;
 using WVMS.DAL;
 using WVMS.DAL.Entities;
 
@@ -42,7 +44,7 @@ namespace WVMS.BLL.Extensions
 
         public static void ConfigureServices(this IServiceCollection services)
         {
-            
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
         }
 
         public static void ConfigureCors(this IServiceCollection services)
