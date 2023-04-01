@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WVMS.DAL.Entities;
 using WVMS.Shared.Dtos;
+using WVMS.Shared.Dtos.Request;
 
 namespace WVMS.BLL.ServicesContract
 {
@@ -13,7 +14,8 @@ namespace WVMS.BLL.ServicesContract
         Task<Product> GetProduct(int id);
         ICollection<Product> GetAllProducts();
         bool ProductExist(int prodId);
-        string CreateProduct(ProductDto product);
+        Task<string> UpdateProduct(int Id, CreateProductRequest request);
+        Task <string> CreateProduct(ProductDto product);
         Task DeleteProduct(int Id);
     }
 }

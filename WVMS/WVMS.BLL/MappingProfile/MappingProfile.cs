@@ -21,6 +21,8 @@ namespace WVMS.BLL.MappingProfile
 
             CreateMap<Product, ProductDto>();
 
+            CreateMap<ProductDto, Product>();
+
             CreateMap<Vendor, VendorDto>();
 
         }

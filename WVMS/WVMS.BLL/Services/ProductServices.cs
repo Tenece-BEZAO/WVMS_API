@@ -8,6 +8,7 @@ using WVMS.BLL.ServicesContract;
 using WVMS.DAL.Entities;
 using WVMS.DAL.Interfaces;
 using WVMS.Shared.Dtos;
+using WVMS.Shared.Dtos.Request;
 
 namespace WVMS.BLL.Services
 {
@@ -25,32 +26,17 @@ namespace WVMS.BLL.Services
             _productRepo = _unitOfWork.GetRepository<Product>();
         }
 
-        public string CreateProduct(ProductDto product)
+        public async Task<string> CreateProduct(ProductDto product)
         {
             Product newProduct = new Product { ProductName = product.ProductName, Price = product.Price, Description = product.Description, ExpiryDate= product.ExpiryDate, Quantity = product.Quantity, VendorId = (int)product.VendorId };
-            var result =  _productRepo.AddAsync(newProduct);
+            var result = await _productRepo.AddAsync(newProduct);
 
-            if (result.IsCompletedSuccessfully)
-                return "Success";
+            if (result != null)
+                return result.ProductId.ToString();
 
             return "Error";
         }
 
-        /*public async Task<string> CreateProduct(ProductDto product)
-        {
-            Product newProduct = new Product { ProductName = product.ProductName, Price = product.Price, Description = product.Description, Quantity = product.Quantity, VendorId = product.VendorId };
-
-            var newProductResult = _appDbContext.Products.AddAsync(newProduct);
-            _appDbContext.SaveChanges();
-
-            if (newProductResult.IsCompletedSuccessfully)
-            {
-                return "Success";
-            }
-
-            return "Error";
-
-        }*/
 
         public async Task<Product> GetProduct(int id)
         {
@@ -79,14 +65,30 @@ namespace WVMS.BLL.Services
                 throw new InvalidOperationException("Product doesn't exist");
 
             await _productRepo.DeleteAsync(product);
-            
+            return;
         }
 
-        public bool Save()
+        public async Task<string> UpdateProduct(int Id, CreateProductRequest request)
         {
-            var saved = _productRepo.Save();
-            return saved > 0 ? true : false;
+            Product newProduct = await _productRepo.GetSingleByAsync(p => p.ProductId == Id);
+            if (newProduct == null)
+                throw new InvalidOperationException("Product does not exist");
+            //  Product product1 = _mapper.Map(request, newProduct);
+            newProduct.ProductName = request.ProductName;
+            newProduct.Description = request.Description;
+            newProduct.Quantity = request.Quantity;
+            newProduct.Price = request.Price;
+            newProduct.ExpiryDate = request.ExpiryDate;
+            newProduct.VendorId = request.VendorId;
+
+      var updated =   await _productRepo.UpdateAsync(newProduct);
+            if (updated == null)
+                throw new NotImplementedException("was unable to update");
+
+            return "Updated";
+
         }
 
+        
     }
 }

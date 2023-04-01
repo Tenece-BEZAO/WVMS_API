@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using WVMS.BLL.ServicesContract;
 using WVMS.DAL.Entities;
 using WVMS.Shared.Dtos;
+using WVMS.Shared.Dtos.Request;
+using WVMS.Shared.Dtos.Response;
 
 namespace WVMS.API.Controllers
 {
@@ -30,25 +32,21 @@ namespace WVMS.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateProduct (ProductDto product)
+        public async Task<IActionResult> CreateProduct ( ProductDto product)
         {
-            var newProduct = _productServices.CreateProduct(product);
-
-            return Created("Get", product.ProductId);
+            if (ModelState.IsValid)
+            {
+                var newProduct =  await _productServices.CreateProduct(product);
+                if(newProduct != null)
+                {
+                    return Created("Get", newProduct);
+                }
+                return BadRequest();
+            }
+            return BadRequest();
         }
 
-        /*[HttpPost]
-        public IActionResult CreateProduct(ProductDto product)
-        {
-          var response =  _productRepository.CreateProduct(product);
-
-            if (response.Result == "Success")
-            {
-                return Created("Get", product.ProductId);
-                 
-            }
-            return Ok("Could not create product!");
-        }*/
+        
 
         [HttpGet("{Id}")]
         [ProducesResponseType(200, Type = typeof(Product))]
@@ -69,10 +67,23 @@ namespace WVMS.API.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public IActionResult DeleteProduct(int Id)
+        public async Task<ActionResult <Product>>DeleteProduct(int Id)
         {
-            _productServices.DeleteProduct(Id);
+          await _productServices.DeleteProduct(Id);
             return Ok();
         }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateProduct(int Id, CreateProductRequest request)
+        {
+
+         var respose =    await _productServices.UpdateProduct(Id, request);
+            if (respose == null)
+                return BadRequest("something went wrong");
+
+            return Ok(respose);
+        }
+        
+
     }
 }
