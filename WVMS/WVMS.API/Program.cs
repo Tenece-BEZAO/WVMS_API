@@ -1,7 +1,13 @@
 using Microsoft.AspNetCore.Identity;
+using System;
 using System.Reflection;
 using WVMS.BLL.Extensions;
+using WVMS.BLL.Services;
+using WVMS.BLL.ServicesContract;
+using WVMS.DAL;
 using WVMS.DAL.Entities;
+using WVMS.DAL.Implementation;
+using WVMS.DAL.Interfaces;
 
 namespace WVMS.API
 {
@@ -27,6 +33,9 @@ namespace WVMS.API
 
 
             builder.Services.AddControllers();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork<WvmsDbContext>>();
+            builder.Services.AddScoped<IProductService, ProductServices>();
+            builder.Services.AddScoped<IVendorService, VendorService>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -74,6 +83,7 @@ namespace WVMS.API
                 await userManager.AddToRoleAsync(superAdmin, "SuperAdmin");
             }
 
+            await Seed.EnsurePopulatedAsync(app);
             await app.RunAsync();
         }
     }

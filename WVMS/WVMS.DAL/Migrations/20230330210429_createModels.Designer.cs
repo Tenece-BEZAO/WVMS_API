@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WVMS.DAL;
 
@@ -11,9 +12,10 @@ using WVMS.DAL;
 namespace WVMS.DAL.Migrations
 {
     [DbContext(typeof(WvmsDbContext))]
-    partial class WvmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230330210429_createModels")]
+    partial class createModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -263,7 +265,6 @@ namespace WVMS.DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ProductName")
@@ -272,7 +273,7 @@ namespace WVMS.DAL.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("VendorId")
+                    b.Property<int?>("VendorId")
                         .HasColumnType("int");
 
                     b.HasKey("ProductId");
@@ -294,7 +295,6 @@ namespace WVMS.DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Rating")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ReviewText")
@@ -426,9 +426,7 @@ namespace WVMS.DAL.Migrations
                 {
                     b.HasOne("WVMS.DAL.Entities.Vendor", null)
                         .WithMany("Products")
-                        .HasForeignKey("VendorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("VendorId");
                 });
 
             modelBuilder.Entity("WVMS.DAL.Entities.Review", b =>
