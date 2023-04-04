@@ -9,7 +9,7 @@ using WVMS.Shared.Dtos.Response;
 
 namespace WVMS.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/vendor")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -32,7 +32,7 @@ namespace WVMS.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct ( ProductDto product)
+        public async Task<IActionResult> CreateProduct ( CreateProductRequest product)
         {
             if (ModelState.IsValid)
             {
@@ -48,36 +48,38 @@ namespace WVMS.API.Controllers
 
         
 
-        [HttpGet("{Id}")]
+        [HttpGet]
+        [Route("product/{Id}")]
         [ProducesResponseType(200, Type = typeof(Product))]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProduct(int Id)
+        public ActionResult<IEnumerable<Product>> GetProduct(Guid userId)
         {
-            if (!_productServices.ProductExist(Id))
-                return NotFound();
+           /* if (!_productServices.ProductExist(Id))
+                return NotFound();*/
 
-            var product = await _productServices.GetProduct(Id);
+            var product =  _productServices.GetProduct(userId);
 
             return Ok(product);
         }
        
 
 
+
         [HttpDelete]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult <Product>>DeleteProduct(int Id)
+        public async Task<ActionResult <Product>>DeleteProduct(Guid Id)
         {
           await _productServices.DeleteProduct(Id);
             return Ok();
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateProduct(int Id, CreateProductRequest request)
+        public async Task<IActionResult> UpdateProduct(CreateProductRequest request)
         {
 
-         var respose =    await _productServices.UpdateProduct(Id, request);
+         var respose =    await _productServices.UpdateProduct(request);
             if (respose == null)
                 return BadRequest("something went wrong");
 

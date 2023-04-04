@@ -30,7 +30,7 @@ namespace WVMS.DAL
 
             base.OnModelCreating(builder);
 
-
+            builder.ApplyConfiguration(new RoleConfiguration());
         }
 
     }

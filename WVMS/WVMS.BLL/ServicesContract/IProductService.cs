@@ -6,16 +6,19 @@ using System.Threading.Tasks;
 using WVMS.DAL.Entities;
 using WVMS.Shared.Dtos;
 using WVMS.Shared.Dtos.Request;
+using WVMS.Shared.Dtos.Response;
 
 namespace WVMS.BLL.ServicesContract
 {
     public interface IProductService
     {
-        Task<Product> GetProduct(int id);
+        IEnumerable<Product> GetProduct(Guid userId);
+        //Task<Product> GetProduct(int id);
         ICollection<Product> GetAllProducts();
-        bool ProductExist(int prodId);
-        Task<string> UpdateProduct(int Id, CreateProductRequest request);
-        Task <string> CreateProduct(ProductDto product);
-        Task DeleteProduct(int Id);
+        /*        Task<CreateProductRequest> UpdateProduct(ProductResponse request);
+        */
+        Task<ProductResponse> UpdateProduct(CreateProductRequest product);
+        Task <ProductResponse> CreateProduct(CreateProductRequest product);
+        Task DeleteProduct(Guid Id);
     }
 }

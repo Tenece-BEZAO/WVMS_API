@@ -6,5 +6,6 @@ namespace WVMS.DAL.Entities
     {
         string FirstName { get; set; }
         string LastName { get; set; }
+        public IList<Product> Products { get; set; } = new List<Product>();
     }
 }

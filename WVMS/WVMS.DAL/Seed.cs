@@ -20,6 +20,9 @@ namespace WVMS.DAL
             if (!await wvmsDbContext.Vendors.AnyAsync())
             {
                 await wvmsDbContext.Vendors.AddRangeAsync(VendorsWithProducts());
+
+                await wvmsDbContext.Customers.AddRangeAsync(Customers());
+
                 await wvmsDbContext.SaveChangesAsync();
             }
         }
@@ -55,6 +58,37 @@ namespace WVMS.DAL
                     Products = new List<Product> {
                     new Product { ProductName = "Bigi Water", Description = "Fizzing, refreshing sparkling water",Price = 2.99m, Quantity = 9000},
                     new Product{ ProductName = "Swarm Water", Description = "Clear spring water", Price = 2.99m, Quantity = 5500} }
+                }
+
+            };
+        }
+
+        private static IEnumerable<Customer> Customers()
+        {
+            return new List<Customer>
+            {
+                new Customer()
+                {
+                    FullName = "Lonzo Ball",
+                    Address = "951 New Haven",
+                    Email = "Lozo@example.com",
+                    PhoneNumber = "321-8899"
+                },
+                
+                new Customer()
+                {
+                    FullName = "Steph Curry",
+                    Address = "7 Monarch St",
+                    Email = "Steph@example.com",
+                    PhoneNumber = "331-9899"
+                },
+                
+                new Customer()
+                {
+                    FullName = "Logan Tall",
+                    Address = "15 Npokiti",
+                    Email = "Tall@example.com",
+                    PhoneNumber = "321-1269"
                 }
 
             };

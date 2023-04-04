@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Server.IIS.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,10 +35,11 @@ namespace WVMS.BLL.Services
 
         public async Task<Vendor> GetVendor(int id)
         {
-            Vendor vendor = await _vendorRepo.GetSingleByAsync(v => v.VendorId == id);
+            /*Vendor vendor = await _vendorRepo.GetSingleByAsync(v => v.VendorId == id);
             if (vendor == null)
                 throw new InvalidOperationException("Sorry, there's no vendor with that Id");
-            return vendor;
+            return vendor;*/
+            throw new NotImplementedException();
         }
 
         /*public async Task<Vendor> GetVendorByProduct(string vendor)
