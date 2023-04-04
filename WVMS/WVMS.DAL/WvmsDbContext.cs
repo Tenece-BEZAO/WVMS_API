@@ -21,6 +21,9 @@ namespace WVMS.DAL
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.ApplyConfiguration(new RoleConfiguration());
+
+            base.OnModelCreating(builder);
             builder.Entity<Product>()
                 .Property(t => t.Price)
                 .HasPrecision(18, 2);
@@ -29,6 +32,7 @@ namespace WVMS.DAL
                 .HasPrecision(18, 2);
 
             base.OnModelCreating(builder);
+
 
 
         }

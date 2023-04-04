@@ -18,5 +18,6 @@ namespace WVMS.DAL.Entities
         public DateTime TransactionDate { get; set; }
         public Customer? Customer { get; set; }
         public Product? Products { get; set; }
+
     }
 }
