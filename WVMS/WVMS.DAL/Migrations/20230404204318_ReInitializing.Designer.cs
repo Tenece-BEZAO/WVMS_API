@@ -12,8 +12,8 @@ using WVMS.DAL;
 namespace WVMS.DAL.Migrations
 {
     [DbContext(typeof(WvmsDbContext))]
-    [Migration("20230404142759_ModifiedProductAndUserState")]
-    partial class ModifiedProductAndUserState
+    [Migration("20230404204318_ReInitializing")]
+    partial class ReInitializing
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,6 +49,29 @@ namespace WVMS.DAL.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "5061a1b6-7428-4b78-a2ec-4c98427302b7",
+                            ConcurrencyStamp = "38637d14-b189-495c-a8c2-33e28bd859a5",
+                            Name = "Vendor",
+                            NormalizedName = "VENDOR"
+                        },
+                        new
+                        {
+                            Id = "ef189564-ae36-4a15-ab01-bf1d2cf9383e",
+                            ConcurrencyStamp = "de752c26-f135-4f6e-beb7-54d46916ef13",
+                            Name = "Customer",
+                            NormalizedName = "CUSTOMER"
+                        },
+                        new
+                        {
+                            Id = "1dc2243b-c8d5-4927-944b-8417d3052336",
+                            ConcurrencyStamp = "79d71165-debf-4bee-8607-eb04d4d4a9eb",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

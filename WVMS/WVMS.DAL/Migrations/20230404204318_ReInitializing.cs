@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WVMS.DAL.Migrations
 {
-    public partial class ModifiedProductAndUserState : Migration
+    public partial class ReInitializing : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -262,6 +262,21 @@ namespace WVMS.DAL.Migrations
                         principalTable: "Products",
                         principalColumn: "ProductId");
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "1dc2243b-c8d5-4927-944b-8417d3052336", "79d71165-debf-4bee-8607-eb04d4d4a9eb", "Admin", "ADMIN" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "5061a1b6-7428-4b78-a2ec-4c98427302b7", "38637d14-b189-495c-a8c2-33e28bd859a5", "Vendor", "VENDOR" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "ef189564-ae36-4a15-ab01-bf1d2cf9383e", "de752c26-f135-4f6e-beb7-54d46916ef13", "Customer", "CUSTOMER" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
