@@ -16,28 +16,29 @@ namespace WVMS.BLL.Services
         private readonly IMapper _mapper;
         private readonly IRepository<Vendor> _vendorRepo;
 
-        public VendorService(IUnitOfWork unitOfWork, IMapper mapper )
+        public VendorService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _vendorRepo = _unitOfWork.GetRepository<Vendor>();
         }
 
-        public async Task <IEnumerable<Vendor>> GetAllVendors()
+        public async Task<IEnumerable<Vendor>> GetAllVendors()
         {
             IEnumerable<Vendor> vendorList = await _vendorRepo.GetAllAsync();
             if (!vendorList.Any())
                 throw new InvalidOperationException("Vendor list is empty");
-            
+
             return vendorList;
         }
 
         public async Task<Vendor> GetVendor(int id)
         {
-            Vendor vendor = await _vendorRepo.GetSingleByAsync(v => v.VendorId == id);
+            /*Vendor vendor = await _vendorRepo.GetSingleByAsync(v => v.VendorId == id);
             if (vendor == null)
                 throw new InvalidOperationException("Sorry, there's no vendor with that Id");
-            return vendor;
+            return vendor;*/
+            throw new NotImplementedException();
         }
 
         /*public async Task<Vendor> GetVendorByProduct(string vendor)

@@ -34,7 +34,7 @@ namespace WVMS.API
 
             builder.Services.AddControllers();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork<WvmsDbContext>>();
-            builder.Services.AddScoped<IProductService, ProductServices>();
+            builder.Services.AddScoped<IProductServices, ProductServices>();
             builder.Services.AddScoped<IVendorService, VendorService>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
