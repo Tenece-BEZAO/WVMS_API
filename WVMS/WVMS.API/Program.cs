@@ -73,6 +73,8 @@ namespace WVMS.API
             // Create the SuperAdmin user with the role
             var superAdmin = new AppUsers
             {
+                FirstName = "Admin",
+                LastName = "Admin",
                 UserName = "superadmin@example.com",
                 Email = "superadmin@example.com"
             };
