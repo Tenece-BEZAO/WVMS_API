@@ -8,7 +8,7 @@ namespace WVMS.BLL.ServicesContract
     {
         Task<IEnumerable<AppUserDto>> GetAllUsers();
         Task<AppUserDto> GetUserById(Guid id);
-        Task LockUser(string id, int mins);
+        Task LockUser(Guid id, int mins);
 
     }
 }

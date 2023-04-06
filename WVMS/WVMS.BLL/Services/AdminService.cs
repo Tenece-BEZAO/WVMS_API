@@ -50,11 +50,10 @@ namespace WVMS.BLL.Services
             };
         }
 
-        public async Task LockUser(string id, int mins)
+        public async Task LockUser(Guid id, int mins)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(id.ToString());
             
-            //var user = await _userRepo.GetSingleByAsync(x => x.Id == id);
             if (user == null)
             {
                 throw new Exception("User not found");
