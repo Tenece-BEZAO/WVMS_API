@@ -18,13 +18,15 @@ namespace WVMS.BLL.Services
     public class AuthenticationService: IAuthenticationService
     {
         private readonly UserManager<AppUsers> _userManager;
+        private readonly SignInManager<AppUsers> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private AppUsers? _user;
 
-        public AuthenticationService(UserManager<AppUsers> userManager, IConfiguration configuration, IMapper mapper)
+        public AuthenticationService(UserManager<AppUsers> userManager, SignInManager<AppUsers> signInManager, IConfiguration configuration, IMapper mapper)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
             _configuration = configuration;
             _mapper = mapper;
         }
@@ -93,7 +95,11 @@ namespace WVMS.BLL.Services
 
         public async Task<bool> ValidateUser(UserForAuthenticationDto userForAuth)
         {
-
+            var _verifySignIn = await _signInManager.PasswordSignInAsync(userForAuth.UserName, userForAuth.Password, isPersistent: false, lockoutOnFailure: true);
+            if (_verifySignIn.IsLockedOut)
+            {
+                throw new Exception("Sorry! You have been lockedout");
+            }
 
             _user = await _userManager.FindByNameAsync(userForAuth.UserName);
 
