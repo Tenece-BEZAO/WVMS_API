@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WVMS.DAL;
 
@@ -11,9 +12,10 @@ using WVMS.DAL;
 namespace WVMS.DAL.Migrations
 {
     [DbContext(typeof(WvmsDbContext))]
-    partial class WvmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230408125556_AddOrderEntities")]
+    partial class AddOrderEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,22 +53,22 @@ namespace WVMS.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "c9f4e73c-9365-43f3-b5fa-1bab9e34662f",
-                            ConcurrencyStamp = "55bd943e-df4a-4cf5-a20c-7fd29a944d4a",
+                            Id = "c827ba43-725c-4329-b51e-e4a706bf1cc0",
+                            ConcurrencyStamp = "7ce04f48-2fa9-4ea1-9354-8cd30e126fdf",
                             Name = "Vendor",
                             NormalizedName = "VENDOR"
                         },
                         new
                         {
-                            Id = "cae48b34-c937-49bb-a1d7-df7e1111983f",
-                            ConcurrencyStamp = "58a0fa77-07b7-4765-96e0-c4fba16409c8",
+                            Id = "c07e1216-105c-4f24-9b76-b30381e9cac0",
+                            ConcurrencyStamp = "de7b69e7-83a9-43cb-a948-25571407a3be",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "e3ea8d48-20fc-41fa-90be-ffd0e010a7b3",
-                            ConcurrencyStamp = "d0ffa862-eb3a-468b-a935-b6c01ada2d7b",
+                            Id = "91fbe627-e569-4ee6-9ff6-6c6f118f557e",
+                            ConcurrencyStamp = "ee95f7f6-2a6a-4ee0-b3bb-f9609cc5383a",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -295,7 +297,7 @@ namespace WVMS.DAL.Migrations
 
                     b.HasIndex("AppUsersId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("WVMS.DAL.Entities.OrderDetail", b =>
@@ -326,7 +328,7 @@ namespace WVMS.DAL.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderDetail");
                 });
 
             modelBuilder.Entity("WVMS.DAL.Entities.Product", b =>
@@ -391,7 +393,39 @@ namespace WVMS.DAL.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Review");
+                    b.ToTable("Reviews");
+                });
+
+            modelBuilder.Entity("WVMS.DAL.Entities.Sale", b =>
+                {
+                    b.Property<int>("SaleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SaleId"), 1L, 1);
+
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("ProductsProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("TransactionDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("SaleId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("ProductsProductId");
+
+                    b.ToTable("Sales");
                 });
 
             modelBuilder.Entity("WVMS.DAL.Entities.Vendor", b =>
@@ -520,6 +554,21 @@ namespace WVMS.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("WVMS.DAL.Entities.Sale", b =>
+                {
+                    b.HasOne("WVMS.DAL.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId");
+
+                    b.HasOne("WVMS.DAL.Entities.Product", "Products")
+                        .WithMany()
+                        .HasForeignKey("ProductsProductId");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("WVMS.DAL.Entities.AppUsers", b =>

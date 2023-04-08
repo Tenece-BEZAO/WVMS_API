@@ -84,7 +84,7 @@ namespace WVMS.BLL.Services
         }
 
 
-        public async Task<ProductResponse> UpdateProduct(CreateProductRequest product)
+        public async Task<ProductResponse> UpdateProduct(UpdateProductRequest product)
         {
             AppUsers userExists = await _userManager.FindByIdAsync(product.UserId.ToString());
             if (userExists == null)

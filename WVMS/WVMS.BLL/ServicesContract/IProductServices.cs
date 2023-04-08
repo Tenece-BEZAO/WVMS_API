@@ -10,6 +10,6 @@ namespace WVMS.BLL.ServicesContract
         Task DeleteProduct(Guid Id);
         ICollection<Product> GetAllProducts();
         IEnumerable<Product> GetProduct(Guid userId);
-        Task<ProductResponse> UpdateProduct(CreateProductRequest product);
+        Task<ProductResponse> UpdateProduct(UpdateProductRequest product);
     }
 }

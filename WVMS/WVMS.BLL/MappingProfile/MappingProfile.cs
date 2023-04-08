@@ -36,6 +36,12 @@ namespace WVMS.BLL.MappingProfile
 
             CreateMap<Product, ProductResponse>();
 
+            //
+            CreateMap<Order, OrderDto>();
+            CreateMap<OrderDto, Order>();
+            CreateMap<Order, OrderDetail>();
+            CreateMap<OrderDetail, Order>();
+            
         }
     }
 }
