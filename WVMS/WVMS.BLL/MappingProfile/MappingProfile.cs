@@ -26,15 +26,15 @@ namespace WVMS.BLL.MappingProfile
 
             CreateMap<ProductDto, Product>();
 
-
-            //var result = _mapper.Map<ProductResponse>(createProduct);
-
             CreateMap<Vendor, VendorDto>();
             CreateMap<ProductResponse, CreateProductRequest>();
 
             CreateMap<CreateProductRequest, ProductResponse>();
 
             CreateMap<Product, ProductResponse>();
+
+            //This mapping should be used when we fix map config for these pair
+            //CreateMap<UserForRegistrationDto, AppUsers>();
 
         }
     }
