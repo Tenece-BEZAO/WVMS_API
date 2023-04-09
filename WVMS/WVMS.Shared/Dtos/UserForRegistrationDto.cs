@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace WVMS.Shared.Dtos
 {
@@ -23,7 +18,7 @@ namespace WVMS.Shared.Dtos
 
         public string? PhoneNumber { get; init; }
 
-        [Required(ErrorMessage = "Location is required")]
+       // [Required(ErrorMessage = "Location is required")]
         public string? Location { get; init; }
 
         public ICollection<string>? Roles { get; init; }
