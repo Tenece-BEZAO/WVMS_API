@@ -44,5 +44,13 @@ namespace WVMS.API.Controllers
             await _adminService.LockUser(id, lockOutDto.Timespan);
             return Ok("You have been locked out");
         }
+
+        [HttpGet]
+        [Route("users/role/{role}_role")]
+        public async Task<IActionResult> GetUsersByRole(string role)
+        {
+            var users = await _adminService.GetUserByRole(role);
+            return Ok(users);
+        }
     }
 }
