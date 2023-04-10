@@ -18,6 +18,7 @@ namespace WVMS.BLL.MappingProfile
             CreateMap<VendorForRegistration, AppUsers>();
 
             CreateMap<CustomerForRegistration, AppUsers>();
+            CreateMap<UserForRegistrationDto, AppUsers>();
             CreateMap<Product, CreateProductRequest>();
 
             CreateMap<CreateProductRequest, Product>();
