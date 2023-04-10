@@ -10,6 +10,5 @@ namespace WVMS.BLL.ServicesContract
         Task<AppUserDto> GetUserById(Guid id);
         Task LockUser(Guid id, int mins);
         Task<IEnumerable<AppUserDto>> GetUserByRole(string role);
-
     }
 }
