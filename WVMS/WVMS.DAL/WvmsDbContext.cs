@@ -15,8 +15,8 @@ namespace WVMS.DAL
 
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<Review> Reviews { get; set; }
-        public DbSet<Sale> Sales { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)

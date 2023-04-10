@@ -76,7 +76,7 @@ namespace WVMS.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateProduct(CreateProductRequest request)
+        public async Task<IActionResult> UpdateProduct(UpdateProductRequest request)
         {
 
             var respose = await _productServices.UpdateProduct(request);

@@ -18,6 +18,7 @@ namespace WVMS.BLL.MappingProfile
             CreateMap<VendorForRegistration, AppUsers>();
 
             CreateMap<CustomerForRegistration, AppUsers>();
+            CreateMap<UserForRegistrationDto, AppUsers>();
             CreateMap<Product, CreateProductRequest>();
 
             CreateMap<CreateProductRequest, Product>();
@@ -33,9 +34,13 @@ namespace WVMS.BLL.MappingProfile
 
             CreateMap<Product, ProductResponse>();
 
+            CreateMap<Order, OrderDto>();
+            CreateMap<OrderDto, Order>();
+            CreateMap<Order, OrderDetail>();
+            CreateMap<OrderDetail, Order>();
+            
             //This mapping should be used when we fix map config for these pair
             //CreateMap<UserForRegistrationDto, AppUsers>();
-
         }
     }
 }
