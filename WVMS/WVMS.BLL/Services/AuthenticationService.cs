@@ -41,12 +41,21 @@ namespace WVMS.BLL.Services
             {
                 throw new Exception("Email already exists");
             }
-            var userResult = _mapper.Map<AppUsers>(userForRegistration);
+            // var userResult = _mapper.Map<AppUsers>(userForRegistration);
+            var userResult = new AppUsers()
+            {
+                FirstName = userForRegistration.FirstName,
+                LastName = userForRegistration.LastName,
+                UserName = userForRegistration.UserName,
+                Email = userForRegistration.Email,
+                PasswordHash = userForRegistration.Password,
+                PhoneNumber = userForRegistration.PhoneNumber,
+            };
             var result = await _userManager.CreateAsync(userResult, userForRegistration.Password);
 
             if (result.Succeeded)
             {
-                await _userManager.AddToRolesAsync(userResult, userForRegistration.Roles);
+                await _userManager.AddToRolesAsync(userResult, userForRegistration.Roles); 
             }
 
             return result;
@@ -87,7 +96,7 @@ namespace WVMS.BLL.Services
             var seller = await _userManager.CreateAsync(sellerResult, sellerForRegistration.Password);
             if (seller.Succeeded)
             {
-                await _userManager.AddToRoleAsync(sellerResult, "Seller");
+                await _userManager.AddToRoleAsync(sellerResult, "Customer");
             }
 
             return seller;
