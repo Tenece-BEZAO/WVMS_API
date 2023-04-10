@@ -21,6 +21,7 @@ namespace WVMS.DAL
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
             builder.ApplyConfiguration(new RoleConfiguration());
 
             base.OnModelCreating(builder);
@@ -30,10 +31,6 @@ namespace WVMS.DAL
             builder.Entity<Review>()
                 .Property(t => t.Rating)
                 .HasPrecision(18, 2);
-
-            base.OnModelCreating(builder);
-
-
 
         }
 

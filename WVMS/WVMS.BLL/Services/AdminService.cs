@@ -65,5 +65,21 @@ namespace WVMS.BLL.Services
             await _userManager.SetLockoutEndDateAsync(user, lockoutEnd);
 
         }
+
+        public async Task<IEnumerable<AppUserDto>> GetUserByRole(string role)
+        {
+            var users = await _userManager.GetUsersInRoleAsync(roleName: role);
+            if (users == null)
+            {
+                throw new Exception($"Users with {role} not found");
+            }
+            return users.Select(u => new AppUserDto() 
+            { 
+                UserName = u.UserName, 
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Email = u.Email
+            });
+        }
     }
 }
