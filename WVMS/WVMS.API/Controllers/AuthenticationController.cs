@@ -16,7 +16,9 @@ namespace WVMS.API.Controllers
             _authenticationService = authenticationService;
         }
 
-
+        /// <summary>
+        /// Authenticates an admin
+        /// </summary>
         [HttpPost]
         //[Authorize(Policy = "SuperAdminPolicy")]
         public async Task<IActionResult> Create([FromBody] UserForRegistrationDto userForRegistration)
@@ -37,6 +39,9 @@ namespace WVMS.API.Controllers
 
         }
 
+        /// <summary>
+        /// Registers a new vendor
+        /// </summary>
         [HttpPost]
         [Route("register/vendor")]
         public async Task<IActionResult> CreateVendor([FromBody] VendorForRegistration vendorForRegistration)
@@ -56,6 +61,9 @@ namespace WVMS.API.Controllers
             return StatusCode(201);
         }
 
+        /// <summary>
+        /// Registers a new customer
+        /// </summary>
         [HttpPost]
         [Route("register/customer")]
         public async Task<IActionResult> CreateCustomer([FromBody] CustomerForRegistration sellerForRegistration)
@@ -75,6 +83,9 @@ namespace WVMS.API.Controllers
             return StatusCode(201);
         }
 
+        /// <summary>
+        /// Logs in a user
+        /// </summary>
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<IActionResult> Authenticate([FromBody] UserForAuthenticationDto user)

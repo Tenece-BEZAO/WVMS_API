@@ -15,6 +15,10 @@ namespace WVMS.API.Controllers
             _orderService = orderService;
         }
 
+        /// <summary>
+        /// Creates a new order
+        /// </summary>
+        /// <returns>A new order</returns>
         [HttpPost]
         [Route("add-order")]
         public async Task<IActionResult> CreateOrder(OrderDto order, Guid userId)
@@ -24,6 +28,10 @@ namespace WVMS.API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Gets lists of all the orders
+        /// </summary>
+        /// <returns>The order list</returns>
         [HttpGet]
         [Route("get-all-orders")]
         public async Task<IActionResult> GetAllOrders()
@@ -32,6 +40,10 @@ namespace WVMS.API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Gets an order by its Id
+        /// </summary>
+        /// <returns>An order</returns>
         [HttpGet]
         [Route("get-order")]
         public async Task<IActionResult> GetOrder(Guid Id)
