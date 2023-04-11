@@ -23,6 +23,10 @@ namespace WVMS.API.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Gets lists of all the products
+        /// </summary>
+        /// <returns>The product list</returns>
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(ICollection<Product>))]
         public IActionResult GetAllProducts()
@@ -31,6 +35,9 @@ namespace WVMS.API.Controllers
             return Ok(allProducts);
         }
 
+        /// <summary>
+        /// Creates a new product
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> CreateProduct(CreateProductRequest product)
         {
@@ -47,7 +54,9 @@ namespace WVMS.API.Controllers
         }
 
 
-
+        /// <summary>
+        /// Gets a product by Id
+        /// </summary>
         [HttpGet]
         [Route("product/{Id}")]
         [ProducesResponseType(200, Type = typeof(Product))]
@@ -63,8 +72,9 @@ namespace WVMS.API.Controllers
         }
 
 
-
-
+        /// <summary>
+        /// Deletes a product by Id
+        /// </summary>
         [HttpDelete]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
@@ -75,6 +85,10 @@ namespace WVMS.API.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Updates a product
+        /// </summary>
+        /// <returns>The updated product</returns>
         [HttpPut]
         public async Task<IActionResult> UpdateProduct(UpdateProductRequest request)
         {

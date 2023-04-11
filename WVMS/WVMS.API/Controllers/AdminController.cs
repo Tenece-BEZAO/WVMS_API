@@ -15,6 +15,10 @@ namespace WVMS.API.Controllers
             _adminService = adminService;
         }
 
+        /// <summary>
+        /// Gets a list of all the users
+        /// </summary>
+        /// <returns>The user list</returns>
         [HttpGet]
         [Route("users")]
         public async Task<IActionResult> GetAllUsers()
@@ -26,6 +30,10 @@ namespace WVMS.API.Controllers
             return Ok(users);
         }
 
+        /// <summary>
+        /// Gets a paricular user by Id
+        /// </summary>
+        /// <returns>A user</returns>
         [HttpGet]
         [Route("users/{id}")]
         public async Task<IActionResult> GetUser(Guid id)
@@ -37,6 +45,9 @@ namespace WVMS.API.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Gets a paricular user by Id and locks them out
+        /// </summary>
         [HttpPatch]
         [Route("users/{id}/lock/")]
         public async Task<IActionResult> LockUser(Guid id, [FromBody] LockOutDto lockOutDto)
@@ -45,6 +56,10 @@ namespace WVMS.API.Controllers
             return Ok("You have been locked out");
         }
 
+        /// <summary>
+        /// Gets a user by role
+        /// </summary>
+        /// <returns>The user</returns>
         [HttpGet]
         [Route("users/role/{role}_role")]
         public async Task<IActionResult> GetUsersByRole(string role)

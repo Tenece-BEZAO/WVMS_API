@@ -16,7 +16,11 @@ namespace WVMS.API.Controllers
             _vendorService = vendorService;
             _mapper = mapper;
         }
-        
+
+        /// <summary>
+        /// Gets lists of all the vendors
+        /// </summary>
+        /// <returns>Vendor list</returns>
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(ICollection<Vendor>))]
         public async Task<ActionResult<IEnumerable<Vendor>>> GetAllVendors()
@@ -25,6 +29,10 @@ namespace WVMS.API.Controllers
             return Ok(vendors);
         }
 
+        /// <summary>
+        /// Gets a particular vendor by Id
+        /// </summary>
+        /// <returns>The order list</returns>
         [HttpGet("{Id}")]
         [ProducesResponseType(200, Type = typeof(Vendor))]
         [ProducesResponseType(400)]
