@@ -18,6 +18,7 @@ namespace WVMS.DAL
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
+        public DbSet<Payment> Payment { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
