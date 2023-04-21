@@ -23,6 +23,7 @@ namespace WVMS.DAL
                 await wvmsDbContext.SaveChangesAsync();
             }
         }
+
         private static IEnumerable<Vendor> VendorsWithProducts()
         {
             return new List<Vendor>

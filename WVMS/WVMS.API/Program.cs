@@ -44,6 +44,38 @@ namespace WVMS.API
             builder.Services.AddSwaggerGen();
             builder.Services.AddSwaggerGen(c =>
             {
+                //c.EnableAnnotations();
+                //c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cee store", Version = "v1" });
+
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description =
+                        "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\""
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    },
+                });
+            });
+            builder.Services.AddSwaggerGen(c =>
+            {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WVMS API", Version = "v1" });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -81,24 +113,23 @@ namespace WVMS.API
             if (!await roleManager.RoleExistsAsync("SuperAdmin"))
             {
                 await roleManager.CreateAsync(new IdentityRole("SuperAdmin"));
+
+                // Create the SuperAdmin user with the role
+                var superAdmin = new AppUsers
+                {
+                    FirstName = "Admin",
+                    LastName = "Admin",
+                    UserName = "superadmin@example.com",
+                    Email = "superadmin@example.com"
+                };
+                var result = await userManager.CreateAsync(superAdmin, "SuperAdminPassword1!");
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(superAdmin, "SuperAdmin");
+                }
             }
-
-
-
-            // Create the SuperAdmin user with the role
-            var superAdmin = new AppUsers
-            {
-                FirstName = "Admin",
-                LastName = "Admin",
-                UserName = "superadmin@example.com",
-                Email = "superadmin@example.com"
-            };
-            var result = await userManager.CreateAsync(superAdmin, "SuperAdminPassword1!");
-
-            if (result.Succeeded)
-            {
-                await userManager.AddToRoleAsync(superAdmin, "SuperAdmin");
-            }
+            
 
             await Seed.EnsurePopulatedAsync(app);
             await app.RunAsync();

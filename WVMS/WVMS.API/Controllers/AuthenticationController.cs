@@ -20,7 +20,7 @@ namespace WVMS.API.Controllers
         /// Authenticates an admin
         /// </summary>
         [HttpPost]
-        //[Authorize(Policy = "SuperAdminPolicy")]
+        [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> Create([FromBody] UserForRegistrationDto userForRegistration)
         {
 
