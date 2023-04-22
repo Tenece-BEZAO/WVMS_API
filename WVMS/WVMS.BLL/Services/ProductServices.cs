@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using System.Linq;
 using System.Security.Claims;
 using WVMS.BLL.ServicesContract;
 using WVMS.DAL.Entities;
@@ -30,7 +31,7 @@ namespace WVMS.BLL.Services
             _cartRepo = _unitOfWork.GetRepository<Cart>();
         }
 
-        public async Task<ProductResponse> CreateProduct(CreateProductRequest product)
+        public async Task<ProductResponse> CreateProductAsync(CreateProductRequest product)
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
@@ -60,18 +61,25 @@ namespace WVMS.BLL.Services
         }
 
 
-
-
-        public IEnumerable<Product> GetProduct(Guid userId)
+        public async Task<List<ProductResponse>> GetProductAsync()
         {
-            var product = _productRepo.GetQueryable(p => p.UserId.ToString() == userId.ToString()).OrderBy(i => i.ProductId);
+            var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            if(userId is null)
+            {
+                throw new Exception("user is not authenticated");
+            }
 
-            if (product == null)
-                throw new InvalidOperationException("Sorry, there's no product with that Id");
+            AppUsers vendor = await _userManager.FindByIdAsync(userId);
+            if (vendor is null)
+            {
+                throw new Exception("Vendor is not found");
+            }
 
-            return product;
+            var product = _productRepo.GetQueryable(p => p.UserId.ToString() == vendor.Id.ToString());
 
+            var result = _mapper.Map<List<ProductResponse>>(product);
+            return result;
         }
 
 
@@ -81,21 +89,58 @@ namespace WVMS.BLL.Services
         }
 
 
-        public async Task DeleteProduct(Guid Id)
+        public async Task<string> DeleteProductAsync(Guid Id)
         {
-            Product product = await _productRepo.GetSingleByAsync(p => p.ProductId.ToString() == Id.ToString());
-            if (product == null)
+            var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if(userId is null)
+            {
+                throw new Exception("user is not authenticated");
+            }
+
+            var vendor = await _userManager.FindByIdAsync(userId);
+
+            if(vendor is null)
+            {
+                throw new Exception("user is not found");
+            }
+
+            Product product = await _productRepo.GetSingleByAsync(p => p.ProductId == Id);
+            
+            if (product is null)
+            {
                 throw new InvalidOperationException("Product doesn't exist");
+            }                
 
             await _productRepo.DeleteAsync(product);
-            return;
+            return $"{product.ProductName} has been deleted successfully";
 
         }
 
 
-        public async Task<ProductResponse> UpdateProduct(UpdateProductRequest product)
+        public async Task<string> UpdateProductAsync(Guid productId, UpdateProductRequest productRequest)
         {
-            AppUsers userExists = await _userManager.FindByIdAsync(product.UserId.ToString());
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userId is null)
+            {
+                throw new Exception("User not found");
+            }
+            Product productExists = await _productRepo.GetSingleByAsync(p => p.ProductId == productId);
+
+            if (productExists is null)
+            {
+                throw new Exception("Product does not exist");
+            }
+
+            var product = _mapper.Map(productRequest, productExists);
+            await _productRepo.UpdateAsync(product);
+            await _unitOfWork.SaveChangesAsync();
+
+            return $"{product.ProductName} is updated successfully";
+
+            /*
+             * AppUsers userExists = await _userManager.FindByIdAsync(product.UserId.ToString());
             if (userExists == null)
                 throw new Exception("User doesn't exist");
 
@@ -108,9 +153,20 @@ namespace WVMS.BLL.Services
                 throw new Exception("Unable to update product");
 
             var result = _mapper.Map<ProductResponse>(updatedProduct);
-            return result;
+            return result;*/
         }
 
+        public async Task<List<ProductSearchResponseDto>> SearchProductAsync(SearchRequestDto searchParam)
+        {
+            var allProducts = await _productRepo.GetAllAsync();
 
+            if (!string.IsNullOrEmpty(searchParam.Search))
+            {
+                allProducts = allProducts.Where(i=>i.ProductName.Contains(searchParam.Search, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            var result = _mapper.Map<List<ProductSearchResponseDto>>(searchParam);
+            return result;
+        }
     }
 }

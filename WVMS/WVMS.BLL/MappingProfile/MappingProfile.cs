@@ -30,6 +30,9 @@ namespace WVMS.BLL.MappingProfile
             CreateMap<Vendor, VendorDto>();
             CreateMap<ProductResponse, CreateProductRequest>();
 
+            //var result = _mapper.Map<List<ProductSearchResponseDto>>(searchParam);
+            CreateMap<ProductSearchResponseDto, Product>();
+            CreateMap<Product, ProductSearchResponseDto>();
             CreateMap<CreateProductRequest, ProductResponse>();
 
             CreateMap<Product, ProductResponse>();

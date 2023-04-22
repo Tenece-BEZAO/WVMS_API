@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WVMS.BLL.Services;
 using WVMS.BLL.ServicesContract;
 using WVMS.DAL.Entities;
 using WVMS.Shared.Dtos;
@@ -37,6 +38,9 @@ namespace WVMS.API.Controllers
             return Ok(allProducts);
         }
 
+
+
+
         /// <summary>
         /// Creates a new product
         /// </summary>
@@ -46,7 +50,7 @@ namespace WVMS.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                var newProduct = await _productServices.CreateProduct(product);
+                var newProduct = await _productServices.CreateProductAsync(product);
                 if (newProduct != null)
                 {
                     return Created("Get", newProduct);
@@ -57,23 +61,24 @@ namespace WVMS.API.Controllers
         }
 
 
+
+
+
         /// <summary>
         /// Gets a product by Id
         /// </summary>
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("product/{Id}")]
+        [HttpGet("get-vendor-products")]
+        [Authorize(Roles = "Vendor, SuperAdmin, Admin")]
         [ProducesResponseType(200, Type = typeof(Product))]
         [ProducesResponseType(400)]
-        public ActionResult<IEnumerable<Product>> GetProduct(Guid userId)
-        {
-            /* if (!_productServices.ProductExist(Id))
-                 return NotFound();*/
-
-            var product = _productServices.GetProduct(userId);
+        public async Task<ActionResult<List<ProductResponse>>> GetVendorProduct()
+        {            
+            var product = await _productServices.GetProductAsync();
 
             return Ok(product);
         }
+
+
 
 
         /// <summary>
@@ -86,9 +91,12 @@ namespace WVMS.API.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<Product>> DeleteProduct(Guid Id)
         {
-            await _productServices.DeleteProduct(Id);
+            await _productServices.DeleteProductAsync(Id);
             return Ok();
         }
+
+
+
 
         /// <summary>
         /// Updates a product
@@ -96,10 +104,10 @@ namespace WVMS.API.Controllers
         /// <returns>The updated product</returns>
         [HttpPut]
         [Authorize(Roles = "Vendor, SuperAdmin, Admin")]
-        public async Task<IActionResult> UpdateProduct(UpdateProductRequest request)
+        public async Task<IActionResult> UpdateProduct(Guid productId, UpdateProductRequest productRequest)
         {
 
-            var respose = await _productServices.UpdateProduct(request);
+            var respose = await _productServices.UpdateProductAsync(productId, productRequest);
             if (respose == null)
                 return BadRequest("something went wrong");
 
@@ -107,5 +115,15 @@ namespace WVMS.API.Controllers
         }
 
 
+
+
+        [AllowAnonymous]
+        [HttpGet("search-products")]
+        public async Task<ActionResult<List<ProductSearchResponseDto>>> SearchProducts([FromQuery] SearchRequestDto searchParam)
+        {
+            var response = await _productServices.SearchProductAsync(searchParam);
+
+            return Ok(response);
+        }
     }
 }

@@ -6,10 +6,12 @@ namespace WVMS.BLL.ServicesContract
 {
     public interface IProductServices
     {
-        Task<ProductResponse> CreateProduct(CreateProductRequest product);
-        Task DeleteProduct(Guid Id);
+        Task<ProductResponse> CreateProductAsync(CreateProductRequest product);
+        Task<string> DeleteProductAsync(Guid Id);
         ICollection<Product> GetAllProducts();
-        IEnumerable<Product> GetProduct(Guid userId);
-        Task<ProductResponse> UpdateProduct(UpdateProductRequest product);
+        Task<List<ProductResponse>> GetProductAsync();
+        Task<string> UpdateProductAsync(Guid productId, UpdateProductRequest productRequest);
+        Task<List<ProductSearchResponseDto>> SearchProductAsync(SearchRequestDto searchParam);
+        
     }
 }
