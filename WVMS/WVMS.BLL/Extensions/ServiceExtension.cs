@@ -10,6 +10,8 @@ using WVMS.BLL.Services;
 using WVMS.BLL.ServicesContract;
 using WVMS.DAL;
 using WVMS.DAL.Entities;
+using WVMS.DAL.Implementation;
+using WVMS.DAL.Interfaces;
 
 namespace WVMS.BLL.Extensions
 {
@@ -41,7 +43,11 @@ namespace WVMS.BLL.Extensions
         public static void ConfigureServices(this IServiceCollection services)
         {
             services.AddTransient<IAuthenticationService, AuthenticationService>();
-            services.AddTransient<IOrderService, OrderServices>();
+            services.AddScoped<IOrderService, OrderServices>();
+            services.AddScoped<IUnitOfWork, UnitOfWork<WvmsDbContext>>();
+            services.AddScoped<IProductServices, ProductServices>();
+            services.AddScoped<IVendorService, VendorService>();
+            services.AddScoped<IAdminService, AdminService>();
         }
 
         public static void ConfigureCors(this IServiceCollection services)
@@ -70,7 +76,7 @@ namespace WVMS.BLL.Extensions
             //This is going to create a system environment variable
             //setx REPORTAPISECRET "ReportAPISecretKey" /M
             var jwtSettings = config.GetSection("JwtSettings");
-            var secretKey = Environment.GetEnvironmentVariable("REPORTAPISECRET") ?? "Fk24632Pz3gyJLYeYqJ6D8qELyNPUubr8vstypCgfMAC8Jyb3B";
+            var secretKey = Environment.GetEnvironmentVariable("SECRET") ?? "YeYqJ6D8Fk24632Pz3gyJNPUubr8vstypCgfLqELyMAC8Jyb3B";
 
             services.AddAuthentication(opt =>
             {

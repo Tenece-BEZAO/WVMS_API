@@ -1,14 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Claims;
 using WVMS.BLL.ServicesContract;
 using WVMS.DAL.Entities;
 using WVMS.DAL.Interfaces;
-using WVMS.Shared.Dtos;
 using WVMS.Shared.Dtos.Request;
 using WVMS.Shared.Dtos.Response;
 
@@ -21,31 +17,44 @@ namespace WVMS.BLL.Services
         private readonly IMapper _mapper;
         private readonly UserManager<AppUsers> _userManager;
         private readonly IRepository<Product> _productRepo;
+        private readonly IRepository<Cart> _cartRepo;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ProductServices(IUnitOfWork unitOfWork, IMapper mapper, UserManager<AppUsers> userManager)
+        public ProductServices(IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork, IMapper mapper, UserManager<AppUsers> userManager)
         {
+            _httpContextAccessor = httpContextAccessor;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _userManager = userManager;
             _productRepo = _unitOfWork.GetRepository<Product>();
+            _cartRepo = _unitOfWork.GetRepository<Cart>();
         }
 
         public async Task<ProductResponse> CreateProduct(CreateProductRequest product)
         {
-
-            AppUsers userExists = await _userManager.FindByIdAsync(product.UserId.ToString());
-            if (userExists == null)
+            var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
             {
-                throw new Exception("User doesn't exist");
+                throw new Exception("User is not authenticated");
+            }
+            var newProduct = _mapper.Map<Product>(product);
+
+            AppUsers vendor = await _userManager.FindByIdAsync(userId);
+
+            if (vendor is null)
+            {
+                throw new Exception("Vendor is not found in database");
             }
 
-            var newProduct = _mapper.Map<Product>(product);
+            newProduct.UserId = Guid.Parse(vendor.Id);
+
             var createProduct = await _productRepo.AddAsync(newProduct);
 
             if (createProduct == null)
             {
                 throw new Exception("Unable to create new product");
             }
+            await _unitOfWork.SaveChangesAsync();
             var result = _mapper.Map<ProductResponse>(createProduct);
             return result;
         }

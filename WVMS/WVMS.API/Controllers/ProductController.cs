@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WVMS.BLL.ServicesContract;
@@ -28,6 +29,7 @@ namespace WVMS.API.Controllers
         /// </summary>
         /// <returns>The product list</returns>
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(200, Type = typeof(ICollection<Product>))]
         public IActionResult GetAllProducts()
         {
@@ -39,6 +41,7 @@ namespace WVMS.API.Controllers
         /// Creates a new product
         /// </summary>
         [HttpPost]
+        [Authorize(Roles = "Vendor, SuperAdmin, Admin")]
         public async Task<IActionResult> CreateProduct(CreateProductRequest product)
         {
             if (ModelState.IsValid)
@@ -58,6 +61,7 @@ namespace WVMS.API.Controllers
         /// Gets a product by Id
         /// </summary>
         [HttpGet]
+        [AllowAnonymous]
         [Route("product/{Id}")]
         [ProducesResponseType(200, Type = typeof(Product))]
         [ProducesResponseType(400)]
@@ -76,6 +80,7 @@ namespace WVMS.API.Controllers
         /// Deletes a product by Id
         /// </summary>
         [HttpDelete]
+        [Authorize(Roles = "Vendor, SuperAdmin, Admin")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
@@ -90,6 +95,7 @@ namespace WVMS.API.Controllers
         /// </summary>
         /// <returns>The updated product</returns>
         [HttpPut]
+        [Authorize(Roles = "Vendor, SuperAdmin, Admin")]
         public async Task<IActionResult> UpdateProduct(UpdateProductRequest request)
         {
 

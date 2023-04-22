@@ -1,6 +1,6 @@
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
-using System;
 using System.Reflection;
 using WVMS.BLL.Extensions;
 using WVMS.BLL.Services;
@@ -14,16 +14,19 @@ namespace WVMS.API
 {
     public class Program
     {
+        //UseStaticFiles();
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.ConfigureCors();
+            builder.Services.ConfigureIISIntegration();
+            
             builder.Services.ConfigureSqlContext(builder.Configuration);
             builder.Services.AddAuthentication();
             builder.Services.ConfigureIdentity();
-            builder.Services.ConfigureServices();
-            builder.Services.AddAutoMapper(Assembly.Load("WVMS.BLL"));
+                       
             builder.Services.ConfigureJWT(builder.Configuration);
             //grants super admin access to all routes
             builder.Services.AddAuthorization(options =>
@@ -34,14 +37,11 @@ namespace WVMS.API
 
 
             builder.Services.AddControllers();
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork<WvmsDbContext>>();
-            builder.Services.AddScoped<IProductServices, ProductServices>();
-            builder.Services.AddScoped<IVendorService, VendorService>();
-            builder.Services.AddScoped<IAdminService, AdminService>();
+            
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            
             builder.Services.AddSwaggerGen(c =>
             {
                 //c.EnableAnnotations();
@@ -73,9 +73,7 @@ namespace WVMS.API
                         Array.Empty<string>()
                     },
                 });
-            });
-            builder.Services.AddSwaggerGen(c =>
-            {
+
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WVMS API", Version = "v1" });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -83,6 +81,9 @@ namespace WVMS.API
             });
 
 
+            builder.Services.ConfigureServices();
+            builder.Services.AddAutoMapper(Assembly.Load("WVMS.BLL"));
+            builder.Services.AddHttpContextAccessor();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -96,7 +97,17 @@ namespace WVMS.API
                 });
             }
 
+            if (app.Environment.IsProduction())
+                app.UseHsts();
+
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.All
+            });
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -129,9 +140,9 @@ namespace WVMS.API
                     await userManager.AddToRoleAsync(superAdmin, "SuperAdmin");
                 }
             }
-            
 
-            await Seed.EnsurePopulatedAsync(app);
+
+            //await Seed.EnsurePopulatedAsync(app);
             await app.RunAsync();
         }
     }

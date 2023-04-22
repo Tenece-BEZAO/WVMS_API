@@ -2,20 +2,16 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using WVMS.BLL.ServicesContract;
 using WVMS.DAL.Entities;
 using WVMS.Shared.Dtos;
 
 namespace WVMS.BLL.Services
 {
-    public class AuthenticationService: IAuthenticationService
+    public class AuthenticationService : IAuthenticationService
     {
         private readonly UserManager<AppUsers> _userManager;
         private readonly SignInManager<AppUsers> _signInManager;
@@ -55,7 +51,7 @@ namespace WVMS.BLL.Services
 
             if (result.Succeeded)
             {
-                await _userManager.AddToRolesAsync(userResult, userForRegistration.Roles); 
+                await _userManager.AddToRolesAsync(userResult, userForRegistration.Roles);
             }
 
             return result;
@@ -131,9 +127,9 @@ namespace WVMS.BLL.Services
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         }
 
-        private SigningCredentials GetSigningCredentials()
+        private static SigningCredentials GetSigningCredentials()
         {
-            var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("REPORTAPISECRET") ?? "Fk24632Pz3gyJLYeYqJ6D8qELyNPUubr8vstypCgfMAC8Jyb3B");
+            var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SECRET") ?? "YeYqJ6D8Fk24632Pz3gyJNPUubr8vstypCgfLqELyMAC8Jyb3B");
             var secret = new SymmetricSecurityKey(key);
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
@@ -142,8 +138,10 @@ namespace WVMS.BLL.Services
         {
             var claims = new List<Claim>
             {
-               new Claim(ClaimTypes.Name, _user.UserName),
-               new Claim(ClaimTypes.Role, "SuperAdmin")
+                new Claim(JwtRegisteredClaimNames.Sub, _user.Id.ToString()),
+                new Claim(ClaimTypes.Name, _user.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, _user.Id.ToString())
             };
 
             var roles = await _userManager.GetRolesAsync(_user);
@@ -157,14 +155,16 @@ namespace WVMS.BLL.Services
         private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
+
             var tokenOptions = new JwtSecurityToken
             (
-            issuer: jwtSettings["validIssuer"],
-            audience: jwtSettings["validAudience"],
-            claims: claims,
-            expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["expires"])),
-            signingCredentials: signingCredentials
+                issuer: jwtSettings["validIssuer"],
+                audience: jwtSettings["validAudience"],
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["expires"])),
+                signingCredentials: signingCredentials
             );
+
             return tokenOptions;
         }
 

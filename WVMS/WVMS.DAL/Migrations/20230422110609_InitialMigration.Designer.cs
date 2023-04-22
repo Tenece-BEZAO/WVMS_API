@@ -12,8 +12,8 @@ using WVMS.DAL;
 namespace WVMS.DAL.Migrations
 {
     [DbContext(typeof(WvmsDbContext))]
-    [Migration("20230404204318_ReInitializing")]
-    partial class ReInitializing
+    [Migration("20230422110609_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,22 +53,22 @@ namespace WVMS.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5061a1b6-7428-4b78-a2ec-4c98427302b7",
-                            ConcurrencyStamp = "38637d14-b189-495c-a8c2-33e28bd859a5",
+                            Id = "a6327c21-d8d0-4c7e-aa4c-6ea061152f99",
+                            ConcurrencyStamp = "9c5bfaef-3482-4ec4-b8a8-fa8a4fe969a9",
                             Name = "Vendor",
                             NormalizedName = "VENDOR"
                         },
                         new
                         {
-                            Id = "ef189564-ae36-4a15-ab01-bf1d2cf9383e",
-                            ConcurrencyStamp = "de752c26-f135-4f6e-beb7-54d46916ef13",
+                            Id = "f53d27aa-8bda-4238-bdfd-4a6b9f9092b6",
+                            ConcurrencyStamp = "93037394-3b53-4d16-855a-b17050ef38d6",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "1dc2243b-c8d5-4927-944b-8417d3052336",
-                            ConcurrencyStamp = "79d71165-debf-4bee-8607-eb04d4d4a9eb",
+                            Id = "9b1f483b-1a4e-4c3b-ba51-0e16afa10232",
+                            ConcurrencyStamp = "cdefe145-a6b4-41df-9e34-ca4d5ac253d8",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -199,6 +199,14 @@ namespace WVMS.DAL.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -245,6 +253,49 @@ namespace WVMS.DAL.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("WVMS.DAL.Entities.Cart", b =>
+                {
+                    b.Property<Guid>("CartId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("CartId");
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("Carts");
+                });
+
+            modelBuilder.Entity("WVMS.DAL.Entities.CartItem", b =>
+                {
+                    b.Property<Guid>("CartItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CartId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("CartItemId");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CartItems");
+                });
+
             modelBuilder.Entity("WVMS.DAL.Entities.Customer", b =>
                 {
                     b.Property<int>("CustomerId")
@@ -273,6 +324,56 @@ namespace WVMS.DAL.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("WVMS.DAL.Entities.Order", b =>
+                {
+                    b.Property<Guid>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AppUsersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CustomerName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("AppUsersId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("WVMS.DAL.Entities.OrderDetail", b =>
+                {
+                    b.Property<Guid>("OrderDetailId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderDetailId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderDetails");
+                });
+
             modelBuilder.Entity("WVMS.DAL.Entities.Product", b =>
                 {
                     b.Property<Guid>("ProductId")
@@ -280,6 +381,7 @@ namespace WVMS.DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ExpiryDate")
@@ -290,6 +392,7 @@ namespace WVMS.DAL.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ProductName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Quantity")
@@ -335,39 +438,7 @@ namespace WVMS.DAL.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Reviews");
-                });
-
-            modelBuilder.Entity("WVMS.DAL.Entities.Sale", b =>
-                {
-                    b.Property<int>("SaleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SaleId"), 1L, 1);
-
-                    b.Property<int?>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("ProductsProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("TransactionDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("SaleId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("ProductsProductId");
-
-                    b.ToTable("Sales");
+                    b.ToTable("Review");
                 });
 
             modelBuilder.Entity("WVMS.DAL.Entities.Vendor", b =>
@@ -448,6 +519,60 @@ namespace WVMS.DAL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WVMS.DAL.Entities.Cart", b =>
+                {
+                    b.HasOne("WVMS.DAL.Entities.AppUsers", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WVMS.DAL.Entities.CartItem", b =>
+                {
+                    b.HasOne("WVMS.DAL.Entities.Cart", "Cart")
+                        .WithMany("CartItems")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WVMS.DAL.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("WVMS.DAL.Entities.Order", b =>
+                {
+                    b.HasOne("WVMS.DAL.Entities.AppUsers", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("AppUsersId");
+                });
+
+            modelBuilder.Entity("WVMS.DAL.Entities.OrderDetail", b =>
+                {
+                    b.HasOne("WVMS.DAL.Entities.Order", "Order")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WVMS.DAL.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("WVMS.DAL.Entities.Product", b =>
                 {
                     b.HasOne("WVMS.DAL.Entities.AppUsers", "User")
@@ -472,24 +597,21 @@ namespace WVMS.DAL.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("WVMS.DAL.Entities.Sale", b =>
+            modelBuilder.Entity("WVMS.DAL.Entities.AppUsers", b =>
                 {
-                    b.HasOne("WVMS.DAL.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId");
-
-                    b.HasOne("WVMS.DAL.Entities.Product", "Products")
-                        .WithMany()
-                        .HasForeignKey("ProductsProductId");
-
-                    b.Navigation("Customer");
+                    b.Navigation("Orders");
 
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("WVMS.DAL.Entities.AppUsers", b =>
+            modelBuilder.Entity("WVMS.DAL.Entities.Cart", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("CartItems");
+                });
+
+            modelBuilder.Entity("WVMS.DAL.Entities.Order", b =>
+                {
+                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("WVMS.DAL.Entities.Vendor", b =>
