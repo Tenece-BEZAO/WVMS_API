@@ -331,17 +331,17 @@ namespace WVMS.DAL.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "9b1f483b-1a4e-4c3b-ba51-0e16afa10232", "cdefe145-a6b4-41df-9e34-ca4d5ac253d8", "Admin", "ADMIN" });
+                values: new object[] { "039ab02f-9261-416c-89b4-91f19911c11f", "d76a93bb-72fd-4360-8bbb-038900c56d7d", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "a6327c21-d8d0-4c7e-aa4c-6ea061152f99", "9c5bfaef-3482-4ec4-b8a8-fa8a4fe969a9", "Vendor", "VENDOR" });
+                values: new object[] { "1743f476-9b3d-4565-8f81-337ac2c4b5b7", "85c11e7c-8b42-4e9a-8e6e-10ceba92bc9d", "Vendor", "VENDOR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "f53d27aa-8bda-4238-bdfd-4a6b9f9092b6", "93037394-3b53-4d16-855a-b17050ef38d6", "Customer", "CUSTOMER" });
+                values: new object[] { "9a55db9c-bc3e-4297-ab8b-1e708cac7ff2", "57ad8bc9-f156-4922-aa59-b84abdb205ca", "Customer", "CUSTOMER" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

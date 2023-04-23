@@ -85,7 +85,9 @@ namespace WVMS.BLL.Services
 
         public ICollection<Product> GetAllProducts()
         {
+            
             return _productRepo.GetAll().ToList();
+            
         }
 
 
@@ -134,6 +136,7 @@ namespace WVMS.BLL.Services
             }
 
             var product = _mapper.Map(productRequest, productExists);
+            
             await _productRepo.UpdateAsync(product);
             await _unitOfWork.SaveChangesAsync();
 
@@ -166,6 +169,7 @@ namespace WVMS.BLL.Services
             }
 
             var result = _mapper.Map<List<ProductSearchResponseDto>>(searchParam);
+            //ProductSearchResponseDto...SearchRequestDto
             return result;
         }
     }

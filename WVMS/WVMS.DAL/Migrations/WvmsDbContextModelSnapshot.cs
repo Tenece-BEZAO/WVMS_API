@@ -51,22 +51,22 @@ namespace WVMS.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a6327c21-d8d0-4c7e-aa4c-6ea061152f99",
-                            ConcurrencyStamp = "9c5bfaef-3482-4ec4-b8a8-fa8a4fe969a9",
+                            Id = "1743f476-9b3d-4565-8f81-337ac2c4b5b7",
+                            ConcurrencyStamp = "85c11e7c-8b42-4e9a-8e6e-10ceba92bc9d",
                             Name = "Vendor",
                             NormalizedName = "VENDOR"
                         },
                         new
                         {
-                            Id = "f53d27aa-8bda-4238-bdfd-4a6b9f9092b6",
-                            ConcurrencyStamp = "93037394-3b53-4d16-855a-b17050ef38d6",
+                            Id = "9a55db9c-bc3e-4297-ab8b-1e708cac7ff2",
+                            ConcurrencyStamp = "57ad8bc9-f156-4922-aa59-b84abdb205ca",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "9b1f483b-1a4e-4c3b-ba51-0e16afa10232",
-                            ConcurrencyStamp = "cdefe145-a6b4-41df-9e34-ca4d5ac253d8",
+                            Id = "039ab02f-9261-416c-89b4-91f19911c11f",
+                            ConcurrencyStamp = "d76a93bb-72fd-4360-8bbb-038900c56d7d",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
