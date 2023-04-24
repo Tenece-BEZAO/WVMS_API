@@ -7,7 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.15" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\WVMS.DAL\WVMS.DAL.csproj" />
+    <ProjectReference Include="..\WVMS.Shared\WVMS.Shared.csproj" />
   </ItemGroup>
 
 </Project>
