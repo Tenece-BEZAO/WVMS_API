@@ -12,6 +12,6 @@ namespace WVMS.BLL.ServicesContract
         Task<List<ProductResponse>> GetProductAsync();
         Task<string> UpdateProductAsync(Guid productId, UpdateProductRequest productRequest);
         Task<List<ProductSearchResponseDto>> SearchProductAsync(SearchRequestDto searchParam);
-        
+        Task<ProductSearchResponseDto> GetProductById(Guid productId);
     }
 }

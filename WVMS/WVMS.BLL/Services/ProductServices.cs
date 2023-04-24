@@ -168,9 +168,23 @@ namespace WVMS.BLL.Services
                 allProducts = allProducts.Where(i=>i.ProductName.Contains(searchParam.Search, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
-            var result = _mapper.Map<List<ProductSearchResponseDto>>(searchParam);
-            //ProductSearchResponseDto...SearchRequestDto
+            var result = _mapper.Map<List<ProductSearchResponseDto>>(allProducts);
+            
             return result;
+        }
+
+        public async Task<ProductSearchResponseDto> GetProductById(Guid productId)
+        {            
+
+            var product = await _productRepo.GetSingleByAsync(p=>p.ProductId==productId);
+
+            if(product is null)
+            {
+                throw new Exception("Product does not exist");
+            }
+
+            var mappedProduct = _mapper.Map<ProductSearchResponseDto>(product);
+            return mappedProduct;
         }
     }
 }

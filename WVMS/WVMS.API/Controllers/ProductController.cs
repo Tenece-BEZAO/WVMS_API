@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WVMS.BLL.Services;
 using WVMS.BLL.ServicesContract;
 using WVMS.DAL.Entities;
-using WVMS.Shared.Dtos;
 using WVMS.Shared.Dtos.Request;
 using WVMS.Shared.Dtos.Response;
 
@@ -40,7 +37,6 @@ namespace WVMS.API.Controllers
 
 
 
-
         /// <summary>
         /// Creates a new product
         /// </summary>
@@ -63,21 +59,19 @@ namespace WVMS.API.Controllers
 
 
 
-
         /// <summary>
-        /// Gets a product by Id
+        /// Gets all vendors product
         /// </summary>
         [HttpGet("get-vendor-products")]
-        [Authorize(Roles = "Vendor, SuperAdmin, Admin")]
+        [Authorize(Roles = "Vendor")]
         [ProducesResponseType(200, Type = typeof(Product))]
         [ProducesResponseType(400)]
         public async Task<ActionResult<List<ProductResponse>>> GetVendorProduct()
-        {            
+        {
             var product = await _productServices.GetProductAsync();
 
             return Ok(product);
         }
-
 
 
 
@@ -117,13 +111,38 @@ namespace WVMS.API.Controllers
 
 
 
+        /// <summary>
+        /// Search for a product
+        /// </summary>
+        /// <param name="searchParam"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpGet("search-products")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(200, Type = typeof(Product))]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<List<ProductSearchResponseDto>>> SearchProducts([FromQuery] SearchRequestDto searchParam)
         {
             var response = await _productServices.SearchProductAsync(searchParam);
 
             return Ok(response);
         }
+
+
+
+
+        /// <summary>
+        /// Get product by Id
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        [HttpGet("get-product-by-id")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetProductById(Guid productId)
+        {
+            var response = await _productServices.GetProductById(productId);
+            return Ok(response);
+        }
+
     }
 }
