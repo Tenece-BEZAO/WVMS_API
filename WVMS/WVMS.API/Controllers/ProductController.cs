@@ -130,7 +130,6 @@ namespace WVMS.API.Controllers
 
 
 
-
         /// <summary>
         /// Get product by Id
         /// </summary>
@@ -141,6 +140,21 @@ namespace WVMS.API.Controllers
         public async Task<IActionResult> GetProductById(Guid productId)
         {
             var response = await _productServices.GetProductById(productId);
+            return Ok(response);
+        }
+
+
+        /// <summary>
+        /// Add product to cart
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="quantity"></param>
+        /// <returns></returns>
+        [HttpPost("add-to-cart")]
+        [Authorize(Roles = "Vendor, Admin, SuperAdmin")]
+        public async Task<IActionResult> AddToCart(Guid productId, int quantity)
+        {
+            var response = await _productServices.AddToCartAsync(productId, quantity);
             return Ok(response);
         }
 

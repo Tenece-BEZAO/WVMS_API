@@ -17,7 +17,7 @@ namespace WVMS.DAL
             WvmsDbContext wvmsDbContext = app.ApplicationServices.CreateScope().ServiceProvider
                 .GetRequiredService<WvmsDbContext>();
 
-            if (!await wvmsDbContext.Vendors.AnyAsync())
+            if (!await wvmsDbContext.Products.AnyAsync())
             {
                 await wvmsDbContext.Vendors.AddRangeAsync(VendorsWithProducts());
                 await wvmsDbContext.SaveChangesAsync();

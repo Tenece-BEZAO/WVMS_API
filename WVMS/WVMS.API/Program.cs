@@ -12,9 +12,16 @@ using WVMS.DAL.Interfaces;
 
 namespace WVMS.API
 {
+    /// <summary>
+    /// Program class
+    /// </summary>
     public class Program
-    {
-        //UseStaticFiles();
+    {        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using WVMS.BLL.ServicesContract;
 using WVMS.DAL.Entities;
@@ -65,7 +65,7 @@ namespace WVMS.BLL.Services
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if(userId is null)
+            if (userId is null)
             {
                 throw new Exception("user is not authenticated");
             }
@@ -85,9 +85,9 @@ namespace WVMS.BLL.Services
 
         public ICollection<Product> GetAllProducts()
         {
-            
+
             return _productRepo.GetAll().ToList();
-            
+
         }
 
 
@@ -95,24 +95,24 @@ namespace WVMS.BLL.Services
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if(userId is null)
+            if (userId is null)
             {
                 throw new Exception("user is not authenticated");
             }
 
             var vendor = await _userManager.FindByIdAsync(userId);
 
-            if(vendor is null)
+            if (vendor is null)
             {
                 throw new Exception("user is not found");
             }
 
             Product product = await _productRepo.GetSingleByAsync(p => p.ProductId == Id);
-            
+
             if (product is null)
             {
                 throw new InvalidOperationException("Product doesn't exist");
-            }                
+            }
 
             await _productRepo.DeleteAsync(product);
             return $"{product.ProductName} has been deleted successfully";
@@ -136,7 +136,7 @@ namespace WVMS.BLL.Services
             }
 
             var product = _mapper.Map(productRequest, productExists);
-            
+
             await _productRepo.UpdateAsync(product);
             await _unitOfWork.SaveChangesAsync();
 
@@ -165,20 +165,20 @@ namespace WVMS.BLL.Services
 
             if (!string.IsNullOrEmpty(searchParam.Search))
             {
-                allProducts = allProducts.Where(i=>i.ProductName.Contains(searchParam.Search, StringComparison.OrdinalIgnoreCase)).ToList();
+                allProducts = allProducts.Where(i => i.ProductName.Contains(searchParam.Search, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             var result = _mapper.Map<List<ProductSearchResponseDto>>(allProducts);
-            
+
             return result;
         }
 
         public async Task<ProductSearchResponseDto> GetProductById(Guid productId)
-        {            
+        {
 
-            var product = await _productRepo.GetSingleByAsync(p=>p.ProductId==productId);
+            var product = await _productRepo.GetSingleByAsync(p => p.ProductId == productId);
 
-            if(product is null)
+            if (product is null)
             {
                 throw new Exception("Product does not exist");
             }
@@ -186,5 +186,75 @@ namespace WVMS.BLL.Services
             var mappedProduct = _mapper.Map<ProductSearchResponseDto>(product);
             return mappedProduct;
         }
+
+        public async Task<string> AddToCartAsync(Guid productId, int quantity)
+        {
+            var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId is null)
+            {
+                throw new Exception("User is not authenticated");
+            }
+
+            var vendor = await _userManager.FindByIdAsync(userId);
+
+            if (vendor is null)
+            {
+                throw new Exception("User is not found");
+            }
+
+            var productExists = await _productRepo.GetSingleByAsync(p => p.ProductId == productId);
+
+            if (productExists is null)
+            {
+                throw new Exception("Product is not found");
+            }
+
+            if (quantity <= 0)
+            {
+                throw new ArgumentException("Invalid quantity");
+            }
+
+            var cartExists = await _cartRepo.GetSingleByAsync(c=>c.UserId == Guid.Parse(vendor.Id),
+                include: i=>i.Include(ci=>ci.CartItems)
+            );
+
+            if(cartExists is null)
+            {
+                cartExists = new Cart
+                {
+                    UserId = Guid.Parse(userId),
+                };
+                await _cartRepo.AddAsync(cartExists);
+            }
+
+            if(cartExists.CartItems is null)
+            {
+                cartExists.CartItems = new List<CartItem>();
+            }
+
+            var cartItemExists = cartExists.CartItems.FirstOrDefault(c=>c.ProductId == productId);
+
+            if(cartItemExists is not null)
+            {
+                cartItemExists.Quantity += quantity;
+            }
+            else
+            {
+                cartItemExists = new CartItem
+                {
+                    Quantity= quantity,
+                    ProductId= productId
+                };
+
+                cartExists.CartItems.Add(cartItemExists);
+            }
+
+            await _cartRepo.UpdateAsync(cartExists);
+            return $"{productExists.ProductName} has been added to cart successfully";
+
+        }
+
+
     }
 }
