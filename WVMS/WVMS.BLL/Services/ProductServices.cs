@@ -215,11 +215,11 @@ namespace WVMS.BLL.Services
                 throw new ArgumentException("Invalid quantity");
             }
 
-            var cartExists = await _cartRepo.GetSingleByAsync(c=>c.UserId == Guid.Parse(vendor.Id),
-                include: i=>i.Include(ci=>ci.CartItems)
+            var cartExists = await _cartRepo.GetSingleByAsync(c => c.UserId == Guid.Parse(vendor.Id),
+                include: i => i.Include(ci => ci.CartItems)
             );
 
-            if(cartExists is null)
+            if (cartExists is null)
             {
                 cartExists = new Cart
                 {
@@ -228,14 +228,14 @@ namespace WVMS.BLL.Services
                 await _cartRepo.AddAsync(cartExists);
             }
 
-            if(cartExists.CartItems is null)
+            if (cartExists.CartItems is null)
             {
                 cartExists.CartItems = new List<CartItem>();
             }
 
-            var cartItemExists = cartExists.CartItems.FirstOrDefault(c=>c.ProductId == productId);
+            var cartItemExists = cartExists.CartItems.FirstOrDefault(c => c.ProductId == productId);
 
-            if(cartItemExists is not null)
+            if (cartItemExists is not null)
             {
                 cartItemExists.Quantity += quantity;
             }
@@ -243,14 +243,23 @@ namespace WVMS.BLL.Services
             {
                 cartItemExists = new CartItem
                 {
-                    Quantity= quantity,
-                    ProductId= productId
+                    Quantity = quantity,
+                    ProductId = productId
                 };
 
                 cartExists.CartItems.Add(cartItemExists);
             }
 
             await _cartRepo.UpdateAsync(cartExists);
+
+            productExists.Quantity -= quantity;
+            if (productExists.Quantity <= 0 && productExists.Quantity > quantity)
+            {
+                return $"{productExists.ProductName} is sold out";
+            }
+
+            await _productRepo.UpdateAsync(productExists);
+
             return $"{productExists.ProductName} has been added to cart successfully";
 
         }
